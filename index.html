@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Союз</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+	<link rel="stylesheet" href="style.css">
+	<link rel="icon" href="./soyuz.png" type="image/png">
+</head>
+<body id="title" data-aos-easing="ease" data-aos-duration="1000" data-aos-delay="0">
+	<div id="snow"></div>
+	<div id="snow2"></div>
+	<div id="snow3"></div>
+
+	<div id="preloader" style="display: none;">
+		<div class="spinner-border text-primary" role="status">
+			<span class="visually-hidden">Загрузка...</span>
+		</div>
+	</div>
+
+	<div id="content" data-aos="fade-up" class="aos-init aos-animate">
+		<h1 class="animate__animated animate__fadeInDown text-center mb-4">СОЮЗ</h1>
+
+		<div class="row g-4">
+			<!-- Первый ряд - Расписание режимов -->
+			<div class="col-12 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+				<div class="card p-4 animate__animated animate__zoomIn">
+					<h5 class="card-title"><i class="fas fa-calendar-alt"></i> Расписание режимов</h5>
+					<h4 style="color: #f0f0f0;">Демократия</h4>
+                    <p style="color: #f0f0f0;">
+						Режимы устанавливаются по такому принципу: <br>
+						1 РДМ на 1 расшир, если антагонисты слишком быстро умирают — разрешается 2 РДМа к одному расширу.
+					</p>
+					<p style="color: #58a6ff;">
+						Примечание: Серые карточки — отменённые указы.
+					</p>
+				</div>
+			</div>
+
+			<!-- Второй ряд - Ядерные оперативники, Рева и 3-часовые смены -->
+			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-left">
+				<div class="card p-4 animate__animated animate__zoomIn">
+					<h5 class="card-title"><i class="fas fa-radiation"></i> Ядерные оперативники и Революция</h5>
+					<p class="card-text">
+						С связи с крупным обновлением СОБРа поменялось кол-во онлайна для установки режима: <br>
+						Революция запрещена до 35 онлайна, <br>
+						Ядерные оперативники запрещены до 30 онлайна.
+					</p>
+				</div>
+			</div>
+
+			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-right">
+				<div class="card p-4 animate__animated animate__zoomIn">
+					<h5 class="card-title"><i class="fas fa-clock"></i> Трёх часовые смены</h5>
+					<p class="card-text">
+						Максимальная продолжительность смены — 2 часа и 30 минут, к этому сроку смена должна быть завершена и игроки уже должны лететь или же находиться на Генеральном Штабе. 
+					</p>
+					<br>
+				</div>
+			</div>
+
+			<!-- Третий ряд - Мета компашки и выбор карт -->
+			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-left">
+				<div class="card p-4 animate__animated animate__zoomIn">
+					<h5 class="card-title"><i class="fas fa-brain"></i> Мета компании</h5>
+					<p class="card-text">
+						Мета компании портят всё РП на союзе, игроки банально забывают о отыгрыше, зная, что их мета друг поймёт шутку. Вы можете строже душить людей за метакомпании, пока они не начнут нормально отыгрывать взаимодействия между друг другом. 
+					</p>
+				</div>
+			</div>
+
+			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-right">
+				<div class="card p-4 animate__animated animate__zoomIn">
+					<h5 class="card-title"><i class="fas fa-map"></i> Выбор карт</h5>
+					<p class="card-text">
+						Карту целиком и полностью ставит игра, если Вы видите, что какая-то большая карта запустилась на одном землекопе, то вы пишите мне в личку с названием карты и скрином, я буду исправлять балансы для карт. Если очень нужно поставить карту для ивента, то вы обязательно должны после перезапустить сервер.
+					</p>
+				</div>
+			</div>
+
+		<footer class="text-center text-light small mt-5" style="color: #d1d1d1 !important; opacity: 0.8;">
+			Последнее обновление: 28.01.2026 © botcott
+		</footer>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+	
+	<!-- Старфилд -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			function createSnowfield(containerId, count, speed, size, color) {
+				const container = document.getElementById(containerId);
+				if (!container) return;
+				
+				for (let i = 0; i < count; i++) {
+					const snow = document.createElement('div');
+					snow.style.position = 'absolute';
+					snow.style.width = `${Math.random() * size}px`;
+					snow.style.height = snow.style.width;
+					snow.style.backgroundColor = color;
+					snow.style.borderRadius = '50%';
+					snow.style.left = `${Math.random() * 100}%`;
+					snow.style.top = `${Math.random() * 50}%`;
+					snow.style.opacity = Math.random() * 0.8 - 0.3;
+					
+					const duration = 10 + Math.random() * speed;
+					snow.style.animation = `moveSnow ${duration}s linear infinite`;
+					
+					container.appendChild(snow);
+				}
+			}
+			
+			createSnowfield('snow', 150, 30, 2, 'rgba(255, 255, 255, 0.8)');
+			createSnowfield('snow2', 75, 45, 4, 'rgba(255, 255, 255, 0.6)');
+			createSnowfield('snow3', 25, 60, 6, 'rgba(255, 255, 255, 0.4)');
+		});
+	</script>
+</body>
+</html>

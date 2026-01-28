@@ -1,0 +1,191 @@
+/* style.css для "Пространства Деймоса" */
+:root {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: #161632;
+    --accent: #00d4ff;
+    --text-white: #ffffff;
+    --text-light: #f0f0f0;
+    --heading-color: #cc191c;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--primary-bg);
+    color: var(--text-white);
+    line-height: 1.6;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+/* Скрываем скроллбар (WebKit) */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Типография */
+h1, h2, h3 {
+    font-weight: 700;
+    color: var(--heading-color);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-top: 20px;
+}
+
+h2 {
+    font-size: 2rem;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
+
+p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Кнопки */
+.btn {
+    border-radius: 25px;
+    padding: 0.7rem 1.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--accent);
+    border: none;
+    color: #0a0a1a;
+}
+
+.btn-primary:hover {
+    background: #00a8cc;
+}
+
+.btn-outline-light {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-white);
+    background: transparent;
+}
+
+.btn-outline-light:hover {
+    border-color: var(--accent);
+}
+
+/* Карточки */
+.card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.removed .card:hover {
+    border-color: gray;
+}
+
+
+.card:hover {
+    border-color: var(--heading-color);
+}
+
+.card-title {
+    color: var(--heading-color);
+    font-weight: 600;
+}
+
+/* Навигация */
+.navbar {
+    background: rgba(10, 10, 26, 0.95) !important;
+}
+
+.navbar-brand {
+    color: var(--accent) !important;
+    font-weight: 700;
+}
+
+.nav-link {
+    color: var(--text-white) !important;
+}
+
+.nav-link:hover {
+    color: var(--accent) !important;
+}
+
+/* Формы */
+.form-control {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-white);
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+}
+
+/* Секции */
+.section {
+    padding: 3rem 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; }
+    .section { padding: 2rem 0; }
+    .wrapper { width: 95%; padding: 0 10px; }
+}
+
+/* Стили для карточек на мобильных */
+@media (max-width: 768px) {
+    .card {
+        margin: 10px 0; /* Вертикальные отступы */
+        padding: 15px;
+    }
+    body {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+}
+
+/* Снежный фон */
+#snow, #snow2, #snow3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Анимация для снега */
+@keyframes moveSnow {
+  from {
+    transform: translateY(0px) translateX(0px);
+  }
+  to {
+    transform: translateY(1000px) translateX(-150px);
+  }
+}
