@@ -53,45 +53,52 @@ function updateOfflineState() {
 // API FETCH-End
 
 // FOOTER-Start
+function formatDate(date) {
+    return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+
 async function updateFooter() {
     const footer = document.querySelector('footer.footer');
-
-    const files = [];
-
-    files.push({ type: 'HTML', url: window.location.href });
-
-    document.querySelectorAll('link[rel="stylesheet"][href]').forEach(link => {
-        files.push({ type: 'CSS', url: link.href });
-    });
-
-    document.querySelectorAll('script[src]').forEach(script => {
-        files.push({ type: 'JS', url: script.src });
-    });
+    const today = new Date();
+    
+    const files = [
+        { type: 'HTML', url: window.location.href },
+        { type: 'CSS', url: 'style.css' },
+        { type: 'JS', url: 'script.js' }
+    ];
 
     const results = {};
 
     for (const file of files) {
         try {
-            const response = await fetch(file.url, { method: 'HEAD' });
+            const response = await fetch(file.url, { 
+                method: 'HEAD',
+                cache: 'no-cache'
+            });
+            
             const lastModified = response.headers.get('Last-Modified');
-
+            
             if (lastModified) {
                 const date = new Date(lastModified);
-                const formatted = date.toLocaleDateString('ru-RU');
-                results[file.type] = formatted;
+                results[file.type] = formatDate(date);
             } else {
-                results[file.type] = 'н/д';
+                results[file.type] = formatDate(today);
             }
         } catch (err) {
-            results[file.type] = 'ошибка';
+            console.warn(`Не удалось получить дату для ${file.type}:`, err);
+            results[file.type] = formatDate(today);
         }
     }
 
-    const htmlDate = results.HTML || 'н/д';
-    const cssDate = results.CSS || 'н/д';
-    const jsDate = results.JS || 'н/д';
+    const htmlDate = results.HTML || formatDate(today);
+    const cssDate = results.CSS || formatDate(today);
+    const jsDate = results.JS || formatDate(today);
 
-    footer.textContent = `HTML: ${"18.04.2026"} | CSS: ${"18.04.2026"} | JS: ${"18.04.2026"} © botcott & PERed`
+    footer.textContent = `HTML: ${htmlDate} | CSS: ${cssDate} | JS: ${jsDate} © botcott & PERed`;
 }
 // FOOTER-End
 
