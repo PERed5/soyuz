@@ -1,4 +1,3 @@
-/* style.css для "Пространства Деймоса" */
 :root {
     --primary-bg: #0a0a0a;
     --secondary-bg: #161632;
@@ -22,21 +21,21 @@ html, body {
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: var(--primary-bg);
+    background: radial-gradient(ellipse at bottom, #0a0e1a 0%, #03050b 100%);
     color: var(--text-white);
     line-height: 1.6;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     margin-left: 10%;
     margin-right: 10%;
+    position: relative;
+    min-height: 100vh;
 }
 
-/* Скрываем скроллбар (WebKit) */
 body::-webkit-scrollbar {
     display: none;
 }
 
-/* Типография */
 h1, h2, h3 {
     font-weight: 700;
     color: var(--heading-color);
@@ -45,6 +44,7 @@ h1, h2, h3 {
 h1 {
     font-size: 2.5rem;
     margin-top: 20px;
+    text-shadow: 0 0 20px rgba(204, 25, 28, 0.3);
 }
 
 h2 {
@@ -62,7 +62,6 @@ p {
     line-height: 1.6;
 }
 
-/* Кнопки */
 .btn {
     border-radius: 25px;
     padding: 0.7rem 1.8rem;
@@ -90,11 +89,11 @@ p {
     border-color: var(--accent);
 }
 
-/* Карточки */
 .card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 30px;
+    background: rgba(10, 15, 30, 0.3) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
     transition: all 0.3s ease;
 }
 
@@ -102,9 +101,10 @@ p {
     border-color: gray;
 }
 
-
 .card:hover {
+    background: rgba(15, 20, 40, 0.4) !important;
     border-color: var(--heading-color);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .card-title {
@@ -112,7 +112,6 @@ p {
     font-weight: 600;
 }
 
-/* Навигация */
 .navbar {
     background: rgba(10, 10, 26, 0.95) !important;
 }
@@ -134,7 +133,6 @@ p {
     color: var(--accent) !important;
 }
 
-/* Формы */
 .form-control {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -147,12 +145,10 @@ p {
     box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
 }
 
-/* Секции */
 .section {
     padding: 3rem 0;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     h1 { font-size: 2rem; }
     h2 { font-size: 1.6rem; }
@@ -160,10 +156,9 @@ p {
     .wrapper { width: 95%; padding: 0 10px; }
 }
 
-/* Стили для карточек на мобильных */
 @media (max-width: 768px) {
     .card {
-        margin: 10px 0; /* Вертикальные отступы */
+        margin: 10px 0;
         padding: 15px;
     }
     body {
@@ -172,19 +167,10 @@ p {
     }
 }
 
-/* Снежный фон */
 #snow, #snow2, #snow3 {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-    overflow: hidden;
+    display: none;
 }
 
-/* Анимация для снега */
 @keyframes moveSnow {
   from {
     transform: translateY(0px) translateX(0px);
@@ -200,8 +186,9 @@ p {
   max-height: 260px;
   margin: 20px auto 20px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(10, 15, 30, 0.3) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
 }
 
@@ -248,4 +235,131 @@ p {
     margin: 6px 0;
     font-size: 0.9rem;
   }
+}
+
+#stars-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    animation: twinkle var(--duration) ease-in-out infinite;
+    opacity: var(--opacity);
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: var(--opacity); transform: scale(1); }
+    50% { opacity: calc(var(--opacity) * 0.2); transform: scale(0.7); }
+}
+
+.falling-star {
+    position: absolute;
+    top: -10px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(200, 220, 255, 0.8);
+    pointer-events: none;
+    animation: fall linear infinite;
+    opacity: 0.7;
+}
+
+.falling-star-fast {
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 4px #aaccff;
+    animation-duration: 6s;
+    opacity: 0.9;
+}
+
+.falling-star-medium {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 6px #cce0ff;
+    animation-duration: 10s;
+    opacity: 0.7;
+}
+
+.falling-star-slow {
+    width: 4px;
+    height: 4px;
+    box-shadow: 0 0 8px #e0e8ff;
+    animation-duration: 15s;
+    opacity: 0.5;
+}
+
+.falling-star-slow::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 1px;
+    height: 15px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
+    opacity: 0.3;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-20px) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: var(--base-opacity, 0.7);
+    }
+    90% {
+        opacity: var(--base-opacity, 0.7);
+    }
+    100% {
+        transform: translateY(100vh) translateX(var(--drift, 0px));
+        opacity: 0;
+    }
+}
+
+.nebula {
+    position: absolute;
+    width: 70vmax;
+    height: 70vmax;
+    background: radial-gradient(circle at 30% 30%, rgba(80, 0, 160, 0.12), transparent 70%);
+    border-radius: 50%;
+    filter: blur(70px);
+    z-index: -2;
+    animation: floatNebula 45s infinite alternate ease-in-out;
+}
+
+.nebula-2 {
+    background: radial-gradient(circle at 70% 60%, rgba(0, 100, 180, 0.1), transparent 70%);
+    width: 90vmax;
+    height: 90vmax;
+    right: -10%;
+    bottom: -10%;
+    animation: floatNebula 55s infinite alternate-reverse ease-in-out;
+}
+
+.nebula-3 {
+    background: radial-gradient(circle at 50% 50%, rgba(120, 40, 120, 0.08), transparent 70%);
+    width: 60vmax;
+    height: 60vmax;
+    left: 20%;
+    top: 30%;
+    animation: floatNebula 60s infinite alternate ease-in-out;
+}
+
+@keyframes floatNebula {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-7%, -5%) scale(1.15); }
+}
+
+#content {
+    position: relative;
+    z-index: 5;
 }
