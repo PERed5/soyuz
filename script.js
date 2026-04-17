@@ -91,7 +91,7 @@ async function updateFooter() {
     const cssDate = results.CSS || 'н/д';
     const jsDate = results.JS || 'н/д';
 
-    footer.textContent = `HTML: ${htmlDate} | CSS: ${cssDate} | JS: ${jsDate} © botcott`
+    footer.textContent = `HTML: ${"18.04.2026"} | CSS: ${"18.04.2026"} | JS: ${"18.04.2026"} © botcott & PERed`
 }
 // FOOTER-End
 
