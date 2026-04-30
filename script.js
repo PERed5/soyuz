@@ -1,6 +1,6 @@
 // API FETCH-Start
-const SERVER_IP = atob('MTg1Ljk3LjI1NS4xNzoxMjE1');
-const API_URL = `http://${SERVER_IP}/status`;
+const SOYUZ_SERVER = atob('MTg1Ljk3LjI1NS4xNzoxMjE1');
+const API_URL = `http://${SOYUZ_SERVER}/status`;
 const REFRESH_INTERVAL = 5000;
 
 const playersCount = document.getElementById('players-current');
@@ -31,7 +31,7 @@ async function fetchServerStatus() {
     serverRound.textContent = serverData.round_id || '—';
     serverMap.textContent = serverData.map || '—';
     serverPreset.textContent = serverData.preset || '—';
-    serverIp.textContent = SERVER_IP;
+    serverIp.textContent = SOYUZ_SERVER;
     serverStatus.textContent = 'Онлайн';
     serverStatus.style.color = '#03da39';
 
@@ -46,7 +46,7 @@ function updateOfflineState() {
   serverRound.textContent = '—';
   serverMap.textContent = '—';
   serverPreset.textContent = '—';
-  serverIp.textContent = SERVER_IP;
+  serverIp.textContent = SOYUZ_SERVER;
   serverStatus.textContent = 'Недоступен';
   serverStatus.style.color = '#eb2e51';
 }
