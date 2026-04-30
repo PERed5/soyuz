@@ -1,5 +1,5 @@
 // API FETCH-Start
-const SERVER_IP = '185.97.255.17:1215';
+const SERVER_IP = atob('MTg1Ljk3LjI1NS4xNzoxMjE1');
 const API_URL = `http://${SERVER_IP}/status`;
 const REFRESH_INTERVAL = 5000;
 
