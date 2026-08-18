@@ -1,5 +1,5 @@
 // API FETCH-Start
-const SOYUZ_SERVER = atob('MTg1Ljk3LjI1NS4xNzoxMjE1');
+const SOYUZ_SERVER = '185.97.255.17:1215';
 const API_URL = `http://${SOYUZ_SERVER}/status`;
 const REFRESH_INTERVAL = 5000;
 
@@ -9,6 +9,7 @@ const serverRound = document.getElementById('server-round');
 const serverMap = document.getElementById('server-map');
 const serverIp = document.getElementById('server-ip');
 const serverPreset = document.getElementById('server-preset');
+const lobbyStatus = document.getElementById('lobby-status');
 
 async function fetchServerStatus() {
   try {
@@ -32,6 +33,7 @@ async function fetchServerStatus() {
     serverMap.textContent = serverData.map || '—';
     serverPreset.textContent = serverData.preset || '—';
     serverIp.textContent = SOYUZ_SERVER;
+    lobbyStatus.textContent = serverData.run_level;
     serverStatus.textContent = 'Онлайн';
     serverStatus.style.color = '#03da39';
 
