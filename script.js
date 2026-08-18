@@ -1,7 +1,7 @@
 // API FETCH-Start
 const SOYUZ_SERVER = '185.97.255.17:1215';
 const API_URL = `http://${SOYUZ_SERVER}/status`;
-const REFRESH_INTERVAL = 1000;
+const REFRESH_INTERVAL = 3000;
 
 const playersCount = document.getElementById('players-current');
 const serverStatus = document.getElementById('server-status');
@@ -25,20 +25,17 @@ function getLobbyStatusText(runLevel) {
 
 async function fetchServerStatus() {
   try {
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(API_URL)}`;
-    const response = await fetch(proxyUrl, {
-      method: 'GET'
+    const response = await fetch(API_URL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok)
       throw new Error(`HTTP ${response.status}`);
 
-    const data = await response.json();
-
-    if (!data.contents)
-      throw new Error('Нет полученной информации от прокси');
-
-    const serverData = JSON.parse(data.contents);
+    const serverData = await response.json();
 
     playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
     serverRound.textContent = serverData.round_id || '—';
