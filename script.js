@@ -24,46 +24,44 @@ function getLobbyStatusText(runLevel) {
 }
 
 async function fetchServerStatus() {
-  try {
-    const proxyUrl = (`https://api.allorigins.win/get?url=${encodeURIComponent('API_URL')}`);
-    const response = await fetch(proxyUrl, {
-      method: 'GET'
-    });
+    try {
+        const res = await fetch(
+            API_URL,
+            {
+                signal: AbortSignal.timeout(5000),
+            }
+        );
 
-    if (!response.ok)
-      throw new Error(`HTTP ${response.status}`);
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
 
-    const data = await response.json();
+        const serverData = await res.json();
 
-    if (!data.contents)
-      throw new Error('Нет полученной информации от прокси');
+        playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
+        serverRound.textContent = serverData.round_id || '—';
+        serverMap.textContent = serverData.map || '—';
+        serverPreset.textContent = serverData.preset || '—';
+        serverIp.textContent = SOYUZ_SERVER;
+        lobbyStatus.textContent = getLobbyStatusText(serverData.run_level);
+        serverStatus.textContent = 'Онлайн';
+        serverStatus.style.color = '#03da39';
 
-    const serverData = JSON.parse(data.contents);
-
-    playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
-    serverRound.textContent = serverData.round_id || '—';
-    serverMap.textContent = serverData.map || '—';
-    serverPreset.textContent = serverData.preset || '—';
-    serverIp.textContent = SOYUZ_SERVER;
-    lobbyStatus.textContent = getLobbyStatusText(serverData.run_level);
-    serverStatus.textContent = 'Онлайн';
-    serverStatus.style.color = '#03da39';
-
-  } catch (error) {
-    console.error('Ошибка запроса:', error);
-    updateOfflineState();
-  }
+    } catch (error) {
+        console.error('Ошибка запроса:', error);
+        updateOfflineState();
+    }
 }
 
 function updateOfflineState() {
-  playersCount.textContent = '—';
-  serverRound.textContent = '—';
-  serverMap.textContent = '—';
-  serverPreset.textContent = '—';
-  serverIp.textContent = SOYUZ_SERVER;
-  lobbyStatus.textContent = '—';
-  serverStatus.textContent = 'Недоступен';
-  serverStatus.style.color = '#eb2e51';
+    playersCount.textContent = '—';
+    serverRound.textContent = '—';
+    serverMap.textContent = '—';
+    serverPreset.textContent = '—';
+    serverIp.textContent = SOYUZ_SERVER;
+    lobbyStatus.textContent = '—';
+    serverStatus.textContent = 'Недоступен';
+    serverStatus.style.color = '#eb2e51';
 }
 // API FETCH-End
 
