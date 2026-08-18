@@ -1,7 +1,7 @@
 // API FETCH-Start
 const SOYUZ_SERVER = '185.97.255.17:1215';
 const API_URL = `http://${SOYUZ_SERVER}/status`;
-const REFRESH_INTERVAL = 5000;
+const REFRESH_INTERVAL = 1000;
 
 const playersCount = document.getElementById('players-current');
 const serverStatus = document.getElementById('server-status');
@@ -10,6 +10,18 @@ const serverMap = document.getElementById('server-map');
 const serverIp = document.getElementById('server-ip');
 const serverPreset = document.getElementById('server-preset');
 const lobbyStatus = document.getElementById('lobby-status');
+
+function getLobbyStatusText(runLevel) {
+    if (runLevel === 0) {
+        return 'Лобби';
+    } else if (runLevel === 1) {
+        return 'Раунд идёт';
+    } else if (runLevel === 2) {
+        return 'Манифест после раунда';
+    } else {
+        return '—';
+    }
+}
 
 async function fetchServerStatus() {
   try {
@@ -33,7 +45,7 @@ async function fetchServerStatus() {
     serverMap.textContent = serverData.map || '—';
     serverPreset.textContent = serverData.preset || '—';
     serverIp.textContent = SOYUZ_SERVER;
-    lobbyStatus.textContent = serverData.run_level;
+    lobbyStatus.textContent = getLobbyStatusText(serverData.run_level);
     serverStatus.textContent = 'Онлайн';
     serverStatus.style.color = '#03da39';
 
@@ -49,6 +61,7 @@ function updateOfflineState() {
   serverMap.textContent = '—';
   serverPreset.textContent = '—';
   serverIp.textContent = SOYUZ_SERVER;
+  lobbyStatus.textContent = '—';
   serverStatus.textContent = 'Недоступен';
   serverStatus.style.color = '#eb2e51';
 }
