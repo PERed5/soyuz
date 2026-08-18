@@ -24,19 +24,22 @@ function getLobbyStatusText(runLevel) {
 }
 
 async function fetchServerStatus() {
-    try {
-        const res = await fetch(
-            API_URL,
-            {
-                signal: AbortSignal.timeout(5000),
-            }
-        );
+  try {
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`;
+    const response = await fetch(proxyUrl, {
+      method: 'GET'
+    });
 
-        if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-        }
+    if (!response.ok)
+      throw new Error(`HTTP ${response.status}`);
 
-        const serverData = await res.json();
+    const data = await response.json();
+
+    if (!data.contents)
+      throw new Error('Нет полученной информации от прокси');
+
+    const serverData = JSON.parse(data.contents);
+
 
         playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
         serverRound.textContent = serverData.round_id || '—';
