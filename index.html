@@ -45,6 +45,7 @@
       		<p>Статус: <span id="server-status">Загрузка...</span></p>
 		</div>
 		</div>
+<!--<div class="removed col-lg-6 aos-init aos-animate" data-aos="fade-left"> для удаленных карточек--> 
 
 		<div class="row g-4">
 			<div class="col-12 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
@@ -63,7 +64,7 @@
 			</div>
             <div class="col-12 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
                 <div class="card p-4 animate__animated animate__zoomIn">
-                    <h5 class="card-title"><i class="fas fa-calendar-alt"></i> Рамки отыгрыша</h5>
+                    <h5 class="card-title"><i class="fas fa-brain"></i> Рамки отыгрыша</h5>
                     <p style="color: #f0f0f0;">
 						Роли милиции, капитана, юридического отдела, НКВБ и Генерального штаба являются ролями с <b>повышенным требованием к отыгрышу</b>. <br>
 						Вы прошли сложный и долгий отбор на эти должности - поведение на них должно быть <u>строго соответствующим статусу и обстановке</u>. <br>
@@ -83,7 +84,7 @@
 
 			<div class="removed col-lg-6 aos-init aos-animate" data-aos="fade-left">
 				<div class="card p-4 animate__animated animate__zoomIn">
-					<h5 class="card-title"><i class="fas fa-radiation"></i> Ядерные оперативники и Революция</h5>
+					<h5 class="card-title">Ядерные оперативники и Революция</h5>
 					<p class="card-text">
 						С связи с крупным обновлением СОБРа поменялось кол-во онлайна для установки режима: <br>
 						Революция запрещена до 35 онлайна, <br>
@@ -92,11 +93,20 @@
 				</div>
 			</div>
 
+			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-left">
+				<div class="card p-4 animate__animated animate__zoomIn">
+					<h5 class="card-title">Оператор Генерального Штаба</h5>
+					<p class="card-text">
+						До официальной публикации обновленного руководства ОЦК любые проведения ОГШ <bold>запрещены</bold>.
+					</p>
+				</div>
+			</div>
+
 			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-right">
 				<div class="card p-4 animate__animated animate__zoomIn">
-					<h5 class="card-title"><i class="fas fa-clock"></i> Трёх часовые смены</h5>
+					<h5 class="card-title">Трёх часовые смены</h5>
 					<p class="card-text">
-						Максимальная продолжительность смены — 2 часа и 30 минут, к этому сроку смена должна быть завершена и игроки уже должны лететь или же находиться на Генеральном Штабе. 
+						Максимальная продолжительность смены — 3 часа и 30 минут, к этому сроку смена должна быть завершена и игроки уже должны лететь или же находиться на Генеральном Штабе. 
 					</p>
 					<br>
 				</div>
@@ -104,46 +114,24 @@
 
 			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-left">
 				<div class="card p-4 animate__animated animate__zoomIn">
-					<h5 class="card-title"><i class="fas fa-brain"></i> Мета компании</h5>
+					<h5 class="card-title">Мета компании</h5>
 					<p class="card-text">
 						Мета компании портят всё РП на союзе, игроки банально забывают о отыгрыше, зная, что их мета друг поймёт шутку. Вы можете строже душить людей за метакомпании, пока они не начнут нормально отыгрывать взаимодействия между друг другом. 
 					</p>
 				</div>
 			</div>
 
-			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-right">
-				<div class="card p-4 animate__animated animate__zoomIn">
-					<h5 class="card-title"><i class="fas fa-map"></i> Выбор карт</h5>
-					<p class="card-text">
-						В ночное время и в позднее утро (Примерно 20:00-12:00 по МСК) карту выбирает игра. В дневное время администрация вправе самостоятельно ставить любые карты по голосованию.<br>
-						Ивент-мастера вправе устанавливать любую карту в любое время для своего ивента.<br>
-						Команда для очистки установленной карты forcemap ""
-					</p>
-				</div>
-			</div>
-
 			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-left">
 				<div class="card p-4 animate__animated animate__zoomIn">
-					<h5 class="card-title"><i class="fas fa-brain"></i> Максимальный рост</h5>
+					<h5 class="card-title">Максимальный рост</h5>
 					<p class="card-text">
 						 Максимальный рост и минимальный рост, который вы можете делать игрокам - 0.8 и 1.2. <br>
 						 Низким расам запрещено делать рост ниже 0.9 (К примеру, дворфы и фелиниды). <br>
-						 Команда для смены роста - > ent ID scale:multiplywithfixture SCALE
+						 Команда для смены роста - "> ent ID scale:multiplywithfixture SCALE"
 					</p>
 				</div>
 			</div>
 			
-			<div class="col-lg-6 aos-init aos-animate" data-aos="fade-right">
-				<div class="card p-4 animate__animated animate__zoomIn">
-					<h5 class="card-title"><i class="fas fa-map"></i>Запрет некроморфов</h5>
-					<p class="card-text">
-						В связи с багом в сборке союза режимы с некроморфами полностью запрещены.
-						Запрещены режимы "Оперативники Круга", "Некроморфы" и все кастомные ивенты с некроморфами.
-					</p>
-				</div>
-			</div>
-		</div>
-
 		<footer class="text-center footer text-light small mt-5" style="color: #d1d1d1 !important; opacity: 0.8;"></footer>
 	</div>
 
