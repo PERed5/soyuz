@@ -25,7 +25,7 @@ function getLobbyStatusText(runLevel) {
 
 async function fetchServerStatus() {
   try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`;
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(API_URL)}`;
     const response = await fetch(proxyUrl, {
       method: 'GET'
     });
