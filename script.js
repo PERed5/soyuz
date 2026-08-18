@@ -1,7 +1,7 @@
 // API FETCH-Start
 const SOYUZ_SERVER = '185.97.255.17:1215';
 const API_URL = `http://${SOYUZ_SERVER}/status`;
-const REFRESH_INTERVAL = 5000;
+const REFRESH_INTERVAL = 3000;
 
 const playersCount = document.getElementById('players-current');
 const serverStatus = document.getElementById('server-status');
@@ -40,31 +40,30 @@ async function fetchServerStatus() {
 
     const serverData = JSON.parse(data.contents);
 
+    playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
+    serverRound.textContent = serverData.round_id || '—';
+    serverMap.textContent = serverData.map || '—';
+    serverPreset.textContent = serverData.preset || '—';
+    serverIp.textContent = SOYUZ_SERVER;
+    lobbyStatus.textContent = getLobbyStatusText(serverData.run_level);
+    serverStatus.textContent = 'Онлайн';
+    serverStatus.style.color = '#03da39';
 
-        playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
-        serverRound.textContent = serverData.round_id || '—';
-        serverMap.textContent = serverData.map || '—';
-        serverPreset.textContent = serverData.preset || '—';
-        serverIp.textContent = SOYUZ_SERVER;
-        lobbyStatus.textContent = getLobbyStatusText(serverData.run_level);
-        serverStatus.textContent = 'Онлайн';
-        serverStatus.style.color = '#03da39';
-
-    } catch (error) {
-        console.error('Ошибка запроса:', error);
-        updateOfflineState();
-    }
+  } catch (error) {
+    console.error('Ошибка запроса:', error);
+    updateOfflineState();
+  }
 }
 
 function updateOfflineState() {
-    playersCount.textContent = '—';
-    serverRound.textContent = '—';
-    serverMap.textContent = '—';
-    serverPreset.textContent = '—';
-    serverIp.textContent = SOYUZ_SERVER;
-    lobbyStatus.textContent = '—';
-    serverStatus.textContent = 'Недоступен';
-    serverStatus.style.color = '#eb2e51';
+  playersCount.textContent = '—';
+  serverRound.textContent = '—';
+  serverMap.textContent = '—';
+  serverPreset.textContent = '—';
+  serverIp.textContent = SOYUZ_SERVER;
+  lobbyStatus.textContent = '—';
+  serverStatus.textContent = 'Недоступен';
+  serverStatus.style.color = '#eb2e51';
 }
 // API FETCH-End
 
