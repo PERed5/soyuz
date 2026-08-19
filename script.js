@@ -1,7 +1,7 @@
 // API FETCH-Start
 const SOYUZ_SERVER = '185.97.255.17:1215';
 const API_URL = `http://${SOYUZ_SERVER}/status`;
-const REFRESH_INTERVAL = 3000;
+const REFRESH_INTERVAL = 10000;
 
 const playersCount = document.getElementById('players-current');
 const serverStatus = document.getElementById('server-status');
