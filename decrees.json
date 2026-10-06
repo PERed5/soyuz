@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Оператор Генерального Штаба",
+    "description": "До официальной публикации обновленного руководства ОЦК любые проведения ОГШ <b>запрещены</b>.",
+    "status": "active",
+    "animation": "fade-left",
+    "col": "col-lg-6"
+  },
+  {
+    "title": "Ядерные оперативники и Революция",
+    "description": "С связи с крупным обновлением СОБРа поменялось кол-во онлайна...",
+    "status": "active",
+    "animation": "fade-left",
+    "col": "col-lg-6"
+  },
+  {
+    "title": "Старый указ",
+    "description": "Утратил силу.",
+    "status": "removed",
+    "animation": "fade-right",
+    "col": "col-lg-6"
+  }
+]

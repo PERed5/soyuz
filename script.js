@@ -1,4 +1,6 @@
-// API FETCH-Start
+// ============================================================
+//  API FETCH — Start
+// ============================================================
 const SOYUZ_SERVER = '185.97.255.17:1215';
 const API_URL = `http://${SOYUZ_SERVER}/status`;
 const REFRESH_INTERVAL = 10000;
@@ -24,50 +26,114 @@ function getLobbyStatusText(runLevel) {
 }
 
 async function fetchServerStatus() {
-  try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`;
-    const response = await fetch(proxyUrl, {
-      method: 'GET'
-    });
+    try {
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`;
+        const response = await fetch(proxyUrl, { method: 'GET' });
 
-    if (!response.ok)
-      throw new Error(`HTTP ${response.status}`);
+        if (!response.ok)
+            throw new Error(`HTTP ${response.status}`);
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (!data.contents)
-      throw new Error('Нет полученной информации от прокси');
+        if (!data.contents)
+            throw new Error('Нет полученной информации от прокси');
 
-    const serverData = JSON.parse(data.contents);
+        const serverData = JSON.parse(data.contents);
 
-    playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
-    serverRound.textContent = serverData.round_id || '—';
-    serverMap.textContent = serverData.map || '—';
-    serverPreset.textContent = serverData.preset || '—';
-    serverIp.textContent = SOYUZ_SERVER;
-    lobbyStatus.textContent = getLobbyStatusText(serverData.run_level);
-    serverStatus.textContent = 'Онлайн';
-    serverStatus.style.color = '#03da39';
+        playersCount.textContent = `${serverData.players} из ${serverData.soft_max_players}` || '—';
+        serverRound.textContent = serverData.round_id || '—';
+        serverMap.textContent = serverData.map || '—';
+        serverPreset.textContent = serverData.preset || '—';
+        serverIp.textContent = SOYUZ_SERVER;
+        lobbyStatus.textContent = getLobbyStatusText(serverData.run_level);
+        serverStatus.textContent = 'Онлайн';
+        serverStatus.style.color = '#03da39';
 
-  } catch (error) {
-    console.error('Ошибка запроса:', error);
-    updateOfflineState();
-  }
+    } catch (error) {
+        console.error('Ошибка запроса:', error);
+        updateOfflineState();
+    }
 }
 
 function updateOfflineState() {
-  playersCount.textContent = '—';
-  serverRound.textContent = '—';
-  serverMap.textContent = '—';
-  serverPreset.textContent = '—';
-  serverIp.textContent = SOYUZ_SERVER;
-  lobbyStatus.textContent = '—';
-  serverStatus.textContent = 'Недоступен';
-  serverStatus.style.color = '#eb2e51';
+    playersCount.textContent = '—';
+    serverRound.textContent = '—';
+    serverMap.textContent = '—';
+    serverPreset.textContent = '—';
+    serverIp.textContent = SOYUZ_SERVER;
+    lobbyStatus.textContent = '—';
+    serverStatus.textContent = 'Недоступен';
+    serverStatus.style.color = '#eb2e51';
 }
-// API FETCH-End
+// ============================================================
+//  API FETCH — End
+// ============================================================
 
-// FOOTER-Start
+
+// ============================================================
+//  DECREES — Start
+//  Указы подгружаются из ./decrees.json
+//  Формат объекта:
+//    {
+//      "title": "Название указа",
+//      "description": "Описание (можно HTML)",
+//      "status": "active" | "removed",
+//      "animation": "fade-left" | "fade-right" | "fade-up",
+//      "col": "col-lg-6" | "col-12"
+//    }
+// ============================================================
+async function loadDecrees() {
+    const container = document.getElementById('decrees-container');
+    if (!container) return;
+
+    try {
+        // ?v=Date.now() — обходим кэш GitHub Pages
+        const res = await fetch('./decrees.json?v=' + Date.now());
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const decrees = await res.json();
+        if (!Array.isArray(decrees)) throw new Error('decrees.json должен быть массивом');
+
+        container.innerHTML = '';
+
+        decrees.forEach((d, i) => {
+            const isRemoved = d.status === 'removed';
+
+            const col = document.createElement('div');
+            col.className =
+                `${d.col || 'col-lg-6'} aos-init aos-animate ${isRemoved ? 'removed' : ''}`.trim();
+            col.setAttribute('data-aos', d.animation || 'fade-up');
+            col.setAttribute('data-aos-delay', String(200 + i * 50));
+
+            col.innerHTML = `
+                <div class="card p-4 animate__animated animate__zoomIn">
+                    <h5 class="card-title">${d.title ?? ''}</h5>
+                    <p class="card-text">${d.description ?? ''}</p>
+                </div>
+            `;
+            container.appendChild(col);
+        });
+
+        if (window.AOS) AOS.refresh();
+
+    } catch (e) {
+        console.error('Не удалось загрузить указы:', e);
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="card p-4">
+                    <p class="text-danger mb-0">Не удалось загрузить список указов.</p>
+                </div>
+            </div>`;
+    }
+}
+// ============================================================
+//  DECREES — End
+// ============================================================
+
+
+// ============================================================
+//  FOOTER — Start
+// ============================================================
 function formatDate(date) {
     return date.toLocaleDateString('ru-RU', {
         day: '2-digit',
@@ -78,25 +144,27 @@ function formatDate(date) {
 
 async function updateFooter() {
     const footer = document.querySelector('footer.footer');
+    if (!footer) return;
+
     const today = new Date();
-    
+
     const files = [
         { type: 'HTML', url: window.location.href },
-        { type: 'CSS', url: 'style.css' },
-        { type: 'JS', url: 'script.js' }
+        { type: 'CSS',  url: 'style.css' },
+        { type: 'JS',   url: 'script.js' }
     ];
 
     const results = {};
 
     for (const file of files) {
         try {
-            const response = await fetch(file.url, { 
+            const response = await fetch(file.url, {
                 method: 'HEAD',
                 cache: 'no-cache'
             });
-            
+
             const lastModified = response.headers.get('Last-Modified');
-            
+
             if (lastModified) {
                 const date = new Date(lastModified);
                 results[file.type] = formatDate(date);
@@ -110,90 +178,99 @@ async function updateFooter() {
     }
 
     const htmlDate = results.HTML || formatDate(today);
-    const cssDate = results.CSS || formatDate(today);
-    const jsDate = results.JS || formatDate(today);
+    const cssDate  = results.CSS  || formatDate(today);
+    const jsDate   = results.JS   || formatDate(today);
 
     footer.textContent = `HTML: ${htmlDate} | CSS: ${cssDate} | JS: ${jsDate} © botcott & PERed`;
 }
-// FOOTER-End
+// ============================================================
+//  FOOTER — End
+// ============================================================
 
+
+// ============================================================
+//  INIT — DOMContentLoaded
+// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     AOS.init({
         duration: 1000,
         once: true
     });
 
+    // ---- Звёзды ----
     const container = document.getElementById('stars-container');
-    
+
     for (let i = 0; i < 250; i++) {
         const star = document.createElement('div');
         star.className = 'star';
-        
+
         const size = Math.random() * 3 + 1;
         const x = Math.random() * 100;
         const y = Math.random() * 100;
         const duration = 2 + Math.random() * 6;
         const opacity = 0.2 + Math.random() * 0.6;
-        
+
         star.style.width = size + 'px';
         star.style.height = size + 'px';
         star.style.left = x + '%';
         star.style.top = y + '%';
         star.style.setProperty('--duration', duration + 's');
         star.style.setProperty('--opacity', opacity);
-        
+
         container.appendChild(star);
     }
-    
+
     for (let i = 0; i < 80; i++) {
         const star = document.createElement('div');
         star.className = 'falling-star falling-star-fast';
-        
+
         const x = Math.random() * 100;
         const delay = Math.random() * 8;
         const drift = (Math.random() - 0.5) * 60;
-        
+
         star.style.left = x + '%';
         star.style.animationDelay = delay + 's';
         star.style.setProperty('--drift', drift + 'px');
         star.style.setProperty('--base-opacity', 0.8 + Math.random() * 0.2);
-        
+
         container.appendChild(star);
     }
-    
+
     for (let i = 0; i < 50; i++) {
         const star = document.createElement('div');
         star.className = 'falling-star falling-star-medium';
-        
+
         const x = Math.random() * 100;
         const delay = Math.random() * 12;
         const drift = (Math.random() - 0.5) * 40;
-        
+
         star.style.left = x + '%';
         star.style.animationDelay = delay + 's';
         star.style.setProperty('--drift', drift + 'px');
         star.style.setProperty('--base-opacity', 0.6 + Math.random() * 0.3);
-        
+
         container.appendChild(star);
     }
-    
+
     for (let i = 0; i < 30; i++) {
         const star = document.createElement('div');
         star.className = 'falling-star falling-star-slow';
-        
+
         const x = Math.random() * 100;
         const delay = Math.random() * 18;
         const drift = (Math.random() - 0.5) * 30;
-        
+
         star.style.left = x + '%';
         star.style.animationDelay = delay + 's';
         star.style.setProperty('--drift', drift + 'px');
         star.style.setProperty('--base-opacity', 0.4 + Math.random() * 0.3);
-        
+
         container.appendChild(star);
     }
 
+    // ---- Запуск ----
     fetchServerStatus();
     updateFooter();
+    loadDecrees();
     setInterval(fetchServerStatus, REFRESH_INTERVAL);
 });
