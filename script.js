@@ -87,7 +87,6 @@ async function loadDecrees() {
     if (!container) return;
 
     try {
-        // ?v=Date.now() — обходим кэш GitHub Pages
         const res = await fetch('./decrees.json?v=' + Date.now());
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
@@ -99,6 +98,11 @@ async function loadDecrees() {
         decrees.forEach((d, i) => {
             const isRemoved = d.status === 'removed';
 
+            // Иконка: если задана — добавляем <i class="...">, иначе пустая строка
+            const iconHtml = d.icon
+                ? `<i class="${d.icon}"></i> `
+                : '';
+
             const col = document.createElement('div');
             col.className =
                 `${d.col || 'col-lg-6'} aos-init aos-animate ${isRemoved ? 'removed' : ''}`.trim();
@@ -107,7 +111,7 @@ async function loadDecrees() {
 
             col.innerHTML = `
                 <div class="card p-4 animate__animated animate__zoomIn">
-                    <h5 class="card-title">${d.title ?? ''}</h5>
+                    <h5 class="card-title">${iconHtml}${d.title ?? ''}</h5>
                     <p class="card-text">${d.description ?? ''}</p>
                 </div>
             `;
