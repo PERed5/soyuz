@@ -71,6 +71,259 @@ function updateOfflineState() {
 
 
 // ============================================================
+//  СОВЕТСКИЙ КРЕДИТ: МАГАЗИН И ТОП — Start
+//  Данные берутся с игрового сервера из публичного API (только чтение, без токена):
+//    GET /soyuz/credits/public/shop   каталог магазина
+//    GET /soyuz/credits/public/top    топ по балансу, топ часов за неделю, призёры прошлой недели
+//  На сервере должен быть включён CVar soyuz.credits.public_api. При аварийной заморозке (soyuz.credits.frozen)
+//  сервер отвечает 503, и сайт показывает, что магазин временно недоступен.
+//  Как и статус сервера, запросы идут через прокси allorigins (сервер отдаёт данные по http, а сайт может быть по https).
+//  Если у сервера появится https, поставьте CREDITS_USE_PROXY = false: тогда запросы пойдут напрямую
+//  (в CVar soyuz.credits.public_api_origin тогда укажите адрес сайта).
+// ============================================================
+const CREDITS_API = `http://${SOYUZ_SERVER}/soyuz/credits/public`;
+const CREDITS_USE_PROXY = true;
+const CREDITS_REFRESH_INTERVAL = 60000;
+
+const creditsState = { products: [], categories: [], category: '', query: '', sort: 'price-asc' };
+
+function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+    ));
+}
+
+function formatCreditsDate(iso) {
+    return new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function formatCreditsDateTime(iso) {
+    return new Date(iso).toLocaleString('ru-RU', {
+        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+}
+
+/** Возвращает { ok, data } или { ok: false, frozen } при заморозке и { ok: false } при недоступности. */
+async function fetchCredits(path) {
+    try {
+        const url = `${CREDITS_API}/${path}`;
+        let status = 200;
+        let body;
+
+        if (CREDITS_USE_PROXY) {
+            const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+            if (!response.ok)
+                throw new Error(`HTTP ${response.status}`);
+            const wrapper = await response.json();
+            status = wrapper.status?.http_code ?? 200;
+            body = wrapper.contents;
+        } else {
+            const response = await fetch(url);
+            status = response.status;
+            body = await response.text();
+        }
+
+        let data = null;
+        try {
+            data = JSON.parse(body);
+        } catch (e) {
+            data = null;
+        }
+
+        if (data?.error === 'frozen')
+            return { ok: false, frozen: true };
+        if (status !== 200 || !data || data.error)
+            return { ok: false };
+
+        return { ok: true, data };
+    } catch (error) {
+        console.error('Ошибка запроса Советского кредита:', error);
+        return { ok: false };
+    }
+}
+
+function creditsUnavailableText(result) {
+    return result.frozen
+        ? 'Советский кредит временно недоступен. Загляните позже.'
+        : 'Не удалось загрузить данные. Попробуйте обновить страницу позже.';
+}
+
+// ---------- Магазин ----------
+
+function productTags(p) {
+    const tags = [];
+    tags.push(p.permanent ? 'Навсегда' : `Срок: ${p.durationDays} дн.`);
+    if (p.discountPercent > 0)
+        tags.push(`<span class="credits-tag sale">Скидка ${p.discountPercent}%</span>`);
+    if (p.stockLeft >= 0)
+        tags.push(`<span class="credits-tag ${p.stockLeft === 0 ? 'warn' : ''}">${p.stockLeft === 0 ? 'Распродано' : `Осталось: ${p.stockLeft} шт.`}</span>`);
+    if (p.minPlaytimeHours)
+        tags.push(`<span class="credits-tag warn">Нужно наиграть ${p.minPlaytimeHours} ч.</span>`);
+    if (p.availableUntil)
+        tags.push(`<span class="credits-tag warn">Продаётся до ${formatCreditsDate(p.availableUntil)}</span>`);
+
+    // Первые два тега (срок) без отдельного класса оборачиваем так же, как остальные.
+    return tags.map(t => t.startsWith('<span') ? t : `<span class="credits-tag">${esc(t)}</span>`).join('');
+}
+
+function renderShop() {
+    const list = document.getElementById('credits-shop-list');
+    const note = document.getElementById('credits-shop-note');
+    if (!list)
+        return;
+
+    const query = creditsState.query.trim().toLowerCase();
+    let items = creditsState.products.filter(p =>
+        (!creditsState.category
+            || (creditsState.category === '__none' ? !p.category : p.category === creditsState.category))
+        && (!query || p.name.toLowerCase().includes(query)));
+
+    if (creditsState.sort === 'price-desc')
+        items.sort((a, b) => b.price - a.price || a.name.localeCompare(b.name, 'ru'));
+    else if (creditsState.sort === 'name')
+        items.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+    else
+        items.sort((a, b) => a.price - b.price || a.name.localeCompare(b.name, 'ru'));
+
+    list.innerHTML = items.map(p => `
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card credits-product">
+                <div class="card-body p-4">
+                    <h5 class="card-title">${esc(p.name)}</h5>
+                    <p class="credits-desc">${esc(p.description || '')}</p>
+                    <div class="credits-tags">${productTags(p)}</div>
+                    <div class="credits-price">${p.price} кр.${p.discountPercent > 0 ? `<span class="old">${p.originalPrice} кр.</span>` : ''}</div>
+                </div>
+            </div>
+        </div>`).join('');
+
+    note.textContent = items.length === 0
+        ? 'Ничего не найдено.'
+        : 'Покупка и надевание — в игре: консольная команда sovcredits.';
+}
+
+function renderCategories() {
+    const box = document.getElementById('credits-categories');
+    if (!box)
+        return;
+
+    // Показываем только категории, в которых есть товары.
+    const used = new Set(creditsState.products.map(p => p.category));
+    const chips = [{ id: '', name: 'Все категории' }]
+        .concat(creditsState.categories.filter(c => used.has(c.id)));
+    if (creditsState.products.some(p => !p.category))
+        chips.push({ id: '__none', name: 'Без категории' });
+
+    box.innerHTML = chips.map(c =>
+        `<button type="button" class="credits-chip ${creditsState.category === c.id ? 'active' : ''}" data-category="${esc(c.id)}">${esc(c.name)}</button>`
+    ).join('');
+}
+
+async function loadCreditsShop() {
+    const result = await fetchCredits('shop');
+    const note = document.getElementById('credits-shop-note');
+    const list = document.getElementById('credits-shop-list');
+
+    if (!result.ok) {
+        if (creditsState.products.length === 0 && list) {
+            list.innerHTML = '';
+            note.textContent = creditsUnavailableText(result);
+        }
+        return;
+    }
+
+    creditsState.products = result.data.products || [];
+    creditsState.categories = result.data.categories || [];
+    renderCategories();
+    renderShop();
+}
+
+// ---------- Топ ----------
+
+function rankList(title, rows, scoreFn, emptyText) {
+    const body = rows.length === 0
+        ? `<p class="credits-muted mb-0">${esc(emptyText)}</p>`
+        : rows.map((r, i) => `
+            <div class="credits-rank">
+                <span class="place">${i + 1}.</span>
+                <span class="who">${esc(r.username)}</span>
+                <span class="score">${esc(scoreFn(r))}</span>
+            </div>`).join('');
+
+    return `
+        <div class="col-12 col-lg-4">
+            <div class="card p-4 h-100">
+                <h5 class="card-title mb-3">${esc(title)}</h5>
+                ${body}
+            </div>
+        </div>`;
+}
+
+async function loadCreditsTop() {
+    const result = await fetchCredits('top');
+    const container = document.getElementById('credits-top-lists');
+    const note = document.getElementById('credits-week-note');
+    if (!container)
+        return;
+
+    if (!result.ok) {
+        if (!container.innerHTML) {
+            note.textContent = creditsUnavailableText(result);
+        }
+        return;
+    }
+
+    const d = result.data;
+    const medals = ['🥇', '🥈', '🥉'];
+    const prizes = (d.prizes || []).map((p, i) => p > 0 ? `${medals[i]} ${p} кр.` : null).filter(Boolean).join(' · ');
+    note.textContent = `Неделя идёт до ${formatCreditsDateTime(d.weekEnd)}. Призы за время игры: ${prizes || '—'}`;
+
+    const winners = (d.lastWeekWinners || []).map(w => ({ username: w.username, hours: w.hours, amount: w.amount, place: w.place }));
+
+    container.innerHTML =
+        rankList('Богатейшие', d.balances || [], r => `${r.balance} кр.`, 'Пока никого.')
+        + rankList('Больше всех играли на этой неделе', d.weekly || [], r => `${r.hours} ч.`, 'Пока никого: нужно наиграть хотя бы час.')
+        + rankList('Призёры прошлой недели', winners.map(w => ({ username: `${medals[w.place - 1] || ''} ${w.username}`, hours: w.hours, amount: w.amount })),
+            r => `${r.hours} ч. · ${r.amount} кр.`, 'Призёров не было.');
+}
+
+function initCredits() {
+    const section = document.getElementById('credits-section');
+    if (!section)
+        return;
+
+    document.getElementById('credits-search').addEventListener('input', e => {
+        creditsState.query = e.target.value;
+        renderShop();
+    });
+    document.getElementById('credits-sort').addEventListener('change', e => {
+        creditsState.sort = e.target.value;
+        renderShop();
+    });
+    document.getElementById('credits-categories').addEventListener('click', e => {
+        const chip = e.target.closest('[data-category]');
+        if (!chip)
+            return;
+
+        creditsState.category = chip.dataset.category;
+        renderCategories();
+        renderShop();
+    });
+
+    const refresh = () => {
+        loadCreditsShop();
+        loadCreditsTop();
+    };
+
+    refresh();
+    setInterval(refresh, CREDITS_REFRESH_INTERVAL);
+}
+// ============================================================
+//  СОВЕТСКИЙ КРЕДИТ: МАГАЗИН И ТОП — End
+// ============================================================
+
+
+// ============================================================
 //  DECREES — Start
 //  Указы подгружаются из ./decrees.json
 //  Формат объекта:
@@ -273,6 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---- Запуск ----
+    initCredits();
     fetchServerStatus();
     updateFooter();
     loadDecrees();

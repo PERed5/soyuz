@@ -46,6 +46,45 @@
 		</div>
 		</div>
 
+		<!-- ============ СОВЕТСКИЙ КРЕДИТ: МАГАЗИН И ТОП (данные с игрового сервера, см. script.js) ============ -->
+		<section id="credits-section" class="mb-5" data-aos="fade-up">
+			<h2 class="text-center mb-3">Советский кредит</h2>
+
+			<ul class="nav nav-pills credits-tabs justify-content-center mb-4" id="credits-tabs" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="credits-shop-tab" data-bs-toggle="pill" data-bs-target="#credits-shop" type="button" role="tab">Магазин</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="credits-top-tab" data-bs-toggle="pill" data-bs-target="#credits-top" type="button" role="tab">Топ</button>
+				</li>
+			</ul>
+
+			<div class="tab-content">
+				<div class="tab-pane fade show active" id="credits-shop" role="tabpanel">
+					<div class="row g-2 mb-3 credits-filters">
+						<div class="col-12 col-md-6">
+							<input type="search" id="credits-search" class="form-control" placeholder="Поиск по названию">
+						</div>
+						<div class="col-12 col-md-6">
+							<select id="credits-sort" class="form-select credits-select">
+								<option value="price-asc">Цена: по возрастанию</option>
+								<option value="price-desc">Цена: по убыванию</option>
+								<option value="name">По названию</option>
+							</select>
+						</div>
+					</div>
+					<div id="credits-categories" class="credits-categories mb-3"></div>
+					<div id="credits-shop-list" class="row g-3"></div>
+					<p id="credits-shop-note" class="text-center credits-muted mt-3"></p>
+				</div>
+
+				<div class="tab-pane fade" id="credits-top" role="tabpanel">
+					<p id="credits-week-note" class="text-center credits-muted mb-4"></p>
+					<div class="row g-4" id="credits-top-lists"></div>
+				</div>
+			</div>
+		</section>
+
 		<!-- ============ ВСЕ КАРТОЧКИ ПОДГРУЖАЮТСЯ ИЗ decrees.json ============ -->
 		<div class="row g-4" id="decrees-container"></div>
 

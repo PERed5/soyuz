@@ -363,3 +363,148 @@ p {
     position: relative;
     z-index: 5;
 }
+
+/* ============ Советский кредит: магазин и топ ============ */
+.credits-tabs .nav-link {
+    color: var(--text-light);
+    border-radius: 25px;
+    padding: 0.5rem 1.6rem;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 0 4px;
+}
+
+.credits-tabs .nav-link.active {
+    background: var(--heading-color);
+    color: var(--text-white);
+}
+
+.credits-muted {
+    color: #9aa0b4;
+}
+
+.credits-select {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-white);
+    border-radius: 8px;
+}
+
+.credits-select option {
+    background: #161632;
+    color: var(--text-white);
+}
+
+.credits-filters .form-control::placeholder {
+    color: #9aa0b4;
+}
+
+.credits-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.credits-chip {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: var(--text-light);
+    border-radius: 20px;
+    padding: 0.25rem 0.9rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.credits-chip:hover {
+    border-color: var(--heading-color);
+}
+
+.credits-chip.active {
+    background: var(--heading-color);
+    border-color: var(--heading-color);
+    color: var(--text-white);
+}
+
+.credits-product {
+    height: 100%;
+}
+
+.credits-product .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.credits-product .credits-desc {
+    color: #9aa0b4;
+    font-size: 0.9rem;
+    flex-grow: 1;
+}
+
+.credits-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0.6rem 0;
+}
+
+.credits-tag {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+}
+
+.credits-tag.sale {
+    background: rgba(204, 25, 28, 0.35);
+}
+
+.credits-tag.warn {
+    background: rgba(224, 164, 76, 0.3);
+}
+
+.credits-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffd34d;
+}
+
+.credits-price .old {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #9aa0b4;
+    text-decoration: line-through;
+    margin-left: 6px;
+}
+
+.credits-rank {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-light);
+}
+
+.credits-rank:last-child {
+    border-bottom: none;
+}
+
+.credits-rank .place {
+    width: 2rem;
+    color: #9aa0b4;
+}
+
+.credits-rank .who {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.credits-rank .score {
+    font-weight: 600;
+    white-space: nowrap;
+}
